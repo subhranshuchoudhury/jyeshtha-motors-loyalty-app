@@ -7,15 +7,36 @@ import {
   Image,
   StatusBar,
 } from 'react-native';
-import React, {useState} from 'react';
-
-const RegisterScreen = () => {
+import React, {useEffect, useState} from 'react';
+import Spinner from 'react-native-loading-spinner-overlay';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+const RegisterScreen = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+
+  // console.log(props);
+
+  const navigation = props.navigation;
+
+  useEffect(() => {
+    changeNavigationBarColorAsync();
+  }, []);
+
+  const changeNavigationBarColorAsync = async () => {
+    try {
+      const response = await changeNavigationBarColor('#F3FDE8');
+    } catch (e) {
+      console.log('changeNavigationBarColorAsync', e); // {success: false}
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* <Image style={styles.image} source={require('./assets/log2.png')} /> */}
-      <StatusBar barStyle="dark-content" animated backgroundColor="white" />
+      <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
+      <Spinner color="#618264" visible={false} />
       <Text
         style={{
           color: 'black',
@@ -27,6 +48,7 @@ const RegisterScreen = () => {
       </Text>
       <View style={styles.inputView}>
         <TextInput
+          keyboardType="phone-pad"
           style={styles.TextInput}
           placeholder="eg. 1234567890"
           placeholderTextColor="#003f5c"
@@ -45,18 +67,84 @@ const RegisterScreen = () => {
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="eg. **********"
+          placeholder="**********"
           placeholderTextColor="#003f5c"
-          secureTextEntry={true}
+          secureTextEntry={false}
           onChangeText={password => setPassword(password)}
         />
       </View>
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn}>
+
+      {otpSent ? (
+        <>
+          <Text
+            style={{
+              color: 'black',
+              justifyContent: 'flex-start',
+              width: '65%',
+              paddingBottom: 2,
+            }}>
+            OTP:
+          </Text>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="eg. 12XX56"
+              placeholderTextColor="#003f5c"
+              secureTextEntry={true}
+              onChangeText={confirmPassword =>
+                setConfirmPassword(confirmPassword)
+              }
+            />
+          </View>
+        </>
+      ) : (
+        <>
+          <Text
+            style={{
+              color: 'black',
+              justifyContent: 'flex-start',
+              width: '65%',
+              paddingBottom: 2,
+            }}>
+            Confirm Password:
+          </Text>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="**********"
+              placeholderTextColor="#003f5c"
+              secureTextEntry={true}
+              onChangeText={confirmPassword =>
+                setConfirmPassword(confirmPassword)
+              }
+            />
+          </View>
+        </>
+      )}
+
+      <TouchableOpacity
+        onPress={() => setOtpSent(!otpSent)}
+        style={styles.loginBtn}>
         <Text style={{color: 'white', fontSize: 15, fontWeight: '500'}}>
-          LOGIN
+          {otpSent ? 'RESEND OTP' : 'SEND OTP'}
+        </Text>
+      </TouchableOpacity>
+
+      {otpSent && (
+        <TouchableOpacity style={styles.loginBtn}>
+          <Text style={{color: 'white', fontSize: 15, fontWeight: '500'}}>
+            REGISTER
+          </Text>
+        </TouchableOpacity>
+      )}
+
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text
+          style={{
+            color: 'black',
+            marginTop: 20,
+          }}>
+          Already have account? Login
         </Text>
       </TouchableOpacity>
     </View>
@@ -66,7 +154,7 @@ const RegisterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3FDE8',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -74,7 +162,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   inputView: {
-    backgroundColor: '#FFC0CB',
+    backgroundColor: '#D0E7D2',
     borderRadius: 30,
     width: '70%',
     height: 45,
@@ -82,6 +170,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   TextInput: {
+    color: 'black',
+    fontWeight: '600',
     height: 50,
     flex: 1,
     padding: 10,
@@ -99,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#FF1493',
+    backgroundColor: '#618264',
   },
 });
 

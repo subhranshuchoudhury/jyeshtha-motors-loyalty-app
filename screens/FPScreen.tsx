@@ -10,9 +10,11 @@ import {
 import React, {useEffect, useState} from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-const LoginScreen = (props: any) => {
+const FPScreen = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
 
   // console.log(props);
 
@@ -46,6 +48,7 @@ const LoginScreen = (props: any) => {
       </Text>
       <View style={styles.inputView}>
         <TextInput
+          keyboardType="phone-pad"
           style={styles.TextInput}
           placeholder="eg. 1234567890"
           placeholderTextColor="#003f5c"
@@ -64,40 +67,84 @@ const LoginScreen = (props: any) => {
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="eg. **********"
+          placeholder="**********"
           placeholderTextColor="#003f5c"
-          secureTextEntry={true}
+          secureTextEntry={false}
           onChangeText={password => setPassword(password)}
         />
       </View>
 
+      {otpSent ? (
+        <>
+          <Text
+            style={{
+              color: 'black',
+              justifyContent: 'flex-start',
+              width: '65%',
+              paddingBottom: 2,
+            }}>
+            OTP:
+          </Text>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="eg. 12XX56"
+              placeholderTextColor="#003f5c"
+              secureTextEntry={true}
+              onChangeText={confirmPassword =>
+                setConfirmPassword(confirmPassword)
+              }
+            />
+          </View>
+        </>
+      ) : (
+        <>
+          <Text
+            style={{
+              color: 'black',
+              justifyContent: 'flex-start',
+              width: '65%',
+              paddingBottom: 2,
+            }}>
+            Confirm Password:
+          </Text>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="**********"
+              placeholderTextColor="#003f5c"
+              secureTextEntry={true}
+              onChangeText={confirmPassword =>
+                setConfirmPassword(confirmPassword)
+              }
+            />
+          </View>
+        </>
+      )}
+
       <TouchableOpacity
-        onPress={() => navigation.navigate('FPScreen')}
-        style={{
-          justifyContent: 'flex-start',
-          width: '65%',
-          paddingBottom: 2,
-        }}>
-        <Text
-          style={{
-            color: 'black',
-          }}>
-          forget password?
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn}>
+        onPress={() => setOtpSent(!otpSent)}
+        style={styles.loginBtn}>
         <Text style={{color: 'white', fontSize: 15, fontWeight: '500'}}>
-          LOGIN
+          {otpSent ? 'RESEND OTP' : 'SEND OTP'}
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+      {otpSent && (
+        <TouchableOpacity style={styles.loginBtn}>
+          <Text style={{color: 'white', fontSize: 15, fontWeight: '500'}}>
+            REGISTER
+          </Text>
+        </TouchableOpacity>
+      )}
+
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text
           style={{
             color: 'black',
             marginTop: 20,
           }}>
-          New here? Create an account
+          Already have account? Login
         </Text>
       </TouchableOpacity>
     </View>
@@ -146,4 +193,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default FPScreen;
