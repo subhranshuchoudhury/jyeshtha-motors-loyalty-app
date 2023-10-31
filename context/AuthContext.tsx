@@ -21,10 +21,10 @@ export const AuthProvider = ({children}: any) => {
   };
 
   useEffect(() => {
-    setAuthInfo({
-      accessToken: 'test-token',
-      name: 'test-name',
-    });
+    // setAuthInfo({
+    //   accessToken: 'test-token',
+    //   name: 'test-name',
+    // });
     setTimeout(() => {
       SplashScreen.hide();
     }, 2000);
