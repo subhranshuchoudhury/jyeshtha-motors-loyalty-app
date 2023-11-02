@@ -13,8 +13,13 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {!AuthInfo.accessToken ? (
+      <Stack.Navigator
+        screenOptions={{
+          animation: 'slide_from_right',
+          animationDuration: 500,
+          animationTypeForReplace: 'pop',
+        }}>
+        {AuthInfo.accessToken ? (
           <Stack.Screen
             options={{
               headerShown: false,

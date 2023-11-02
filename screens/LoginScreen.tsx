@@ -6,14 +6,18 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
+  Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
+import {AuthContext} from '../context/AuthContext';
 const LoginScreen = (props: any) => {
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-
+  const {AuthInfo, loginUser}: any = useContext(AuthContext);
+  const [Loading, setLoading] = useState(false);
   // console.log(props);
 
   const navigation = props.navigation;
@@ -30,11 +34,82 @@ const LoginScreen = (props: any) => {
     }
   };
 
+  const disPatchLogin = async () => {
+    const phoneRegex = /^[0-9]+$/;
+    if (phone.length < 10 || !phoneRegex.test(phone)) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Invalid Mobile',
+        textBody: 'Please enter valid mobile number',
+        button: 'close',
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Invalid Password',
+        textBody: 'Please enter valid password',
+        button: 'close',
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    const response = await loginUser(phone, password);
+
+    setLoading(false);
+
+    if (response.status === 200) {
+      Dialog.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Login Successful',
+        textBody: response.message,
+        button: 'close',
+      });
+      navigation.navigate('Home');
+    } else if (response.status === 401) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Invalid Credentials',
+        textBody: response.message,
+        button: 'close',
+      });
+    } else if (response.status === 404) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'User Not Found',
+        textBody: response.message,
+        button: 'close',
+      });
+    } else if (response.status === 500) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Internal Server Error',
+        textBody: response.message,
+        button: 'close',
+      });
+    } else {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Internal Server Error',
+        textBody: 'Something went wrong',
+        button: 'close',
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {/* <Image style={styles.image} source={require('./assets/log2.png')} /> */}
+      <Image
+        style={styles.image}
+        source={require('../assets/images/jmLogo.png')}
+      />
       <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
-      <Spinner color="#618264" visible={false} />
+      <Spinner color="#618264" visible={Loading} />
+
       <Text
         style={{
           color: 'black',
@@ -47,9 +122,10 @@ const LoginScreen = (props: any) => {
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
+          keyboardType="phone-pad"
           placeholder="eg. 1234567890"
           placeholderTextColor="#003f5c"
-          onChangeText={email => setEmail(email)}
+          onChangeText={phone => setPhone(phone)}
         />
       </View>
       <Text
@@ -85,7 +161,7 @@ const LoginScreen = (props: any) => {
           forget password?
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity onPress={disPatchLogin} style={styles.loginBtn}>
         <Text style={{color: 'white', fontSize: 15, fontWeight: '500'}}>
           LOGIN
         </Text>
@@ -100,6 +176,14 @@ const LoginScreen = (props: any) => {
           New here? Create an account
         </Text>
       </TouchableOpacity>
+      <Text
+        style={{
+          color: '#618264',
+          marginTop: 20,
+          fontWeight: '700',
+        }}>
+        © Jyeshtha Motors
+      </Text>
     </View>
   );
 };
@@ -113,6 +197,9 @@ const styles = StyleSheet.create({
   },
   image: {
     marginBottom: 40,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   inputView: {
     backgroundColor: '#D0E7D2',

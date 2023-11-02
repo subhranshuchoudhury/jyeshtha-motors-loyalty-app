@@ -199,7 +199,6 @@ const HomeScreen = () => {
           height: 500,
         }}>
         <Spinner color="#618264" animation="fade" visible={false} />
-
         {isRedeemedLoading && (
           <SkeletonPlaceholder backgroundColor="#618264" borderRadius={4}>
             <View
