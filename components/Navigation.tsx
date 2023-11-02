@@ -6,6 +6,7 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import {AuthContext} from '../context/AuthContext';
 import FPScreen from '../screens/FPScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
   const {AuthInfo}: any = useContext(AuthContext);
@@ -20,13 +21,29 @@ const Navigation = () => {
           animationTypeForReplace: 'pop',
         }}>
         {AuthInfo.accessToken ? (
-          <Stack.Screen
-            options={{
-              headerShown: false,
-            }}
-            name="Home"
-            component={HomeScreen}
-          />
+          <>
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="Home"
+              component={HomeScreen}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="Profile"
+              component={ProfileScreen}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="FPScreen"
+              component={FPScreen}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen

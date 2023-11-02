@@ -16,11 +16,12 @@ import QRScanner from '../components/QRScanner';
 import SplashScreen from 'react-native-splash-screen';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-
-const HomeScreen = () => {
+const HomeScreen = (props: any) => {
   const [showQRScanner, setshowQRScanner] = useState<boolean>(false);
   const [scanData, setScanData] = useState<string>('');
   const [isRedeemedLoading, setIsRedeemedLoading] = useState(false);
+  const {AuthInfo, mutateBalance}: any = useContext(AuthContext);
+
   // splash screen
   useEffect(() => {
     changeNavigationBarColorAsync('');
@@ -133,7 +134,7 @@ const HomeScreen = () => {
           />
         </View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Profile')}>
           <View
             style={{
               flexDirection: 'row',
@@ -156,7 +157,7 @@ const HomeScreen = () => {
                 color: 'black',
                 fontWeight: '800',
               }}>
-              907877
+              {AuthInfo?.accountBalance || 0}
             </Text>
           </View>
         </TouchableOpacity>
@@ -170,7 +171,9 @@ const HomeScreen = () => {
           width: '90%',
           flexWrap: 'wrap',
         }}>
-        <Text style={styles.headingText}>Subhranshu!</Text>
+        <Text style={styles.headingText}>
+          {AuthInfo?.name?.split(' ')?.[0]}!
+        </Text>
       </View>
       <View
         style={{

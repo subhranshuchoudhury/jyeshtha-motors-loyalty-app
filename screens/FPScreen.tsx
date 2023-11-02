@@ -34,7 +34,10 @@ const FPScreen = (props: any) => {
 
   return (
     <View style={styles.container}>
-      {/* <Image style={styles.image} source={require('./assets/log2.png')} /> */}
+      <Image
+        style={styles.image}
+        source={require('../assets/images/jmLogo.png')}
+      />
       <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
       <Spinner color="#618264" visible={false} />
       <Text
@@ -160,6 +163,9 @@ const styles = StyleSheet.create({
   },
   image: {
     marginBottom: 40,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   inputView: {
     backgroundColor: '#D0E7D2',

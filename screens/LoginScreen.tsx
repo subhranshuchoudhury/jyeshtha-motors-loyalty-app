@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
-  Alert,
 } from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -84,6 +83,14 @@ const LoginScreen = (props: any) => {
         textBody: response.message,
         button: 'close',
       });
+    } else if (response.status === 301) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Account Not Verified',
+        textBody: response.message,
+        button: 'close',
+      });
+      props.navigation.navigate('Register');
     } else if (response.status === 500) {
       Dialog.show({
         type: ALERT_TYPE.DANGER,

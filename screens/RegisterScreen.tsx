@@ -13,6 +13,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 import {AuthContext} from '../context/AuthContext';
+import {MMKV} from 'react-native-mmkv';
+
 const RegisterScreen = (props: any) => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
@@ -23,6 +25,7 @@ const RegisterScreen = (props: any) => {
   const [Loading, setLoading] = useState(false);
   const [registered, setRegistered] = useState(false);
   const {registerUser, sendOTP, verifyOTP}: any = useContext(AuthContext);
+  const storage = new MMKV();
   // console.log(props);
 
   const navigation = props.navigation;
@@ -81,7 +84,7 @@ const RegisterScreen = (props: any) => {
         textBody: response.message,
         button: 'close',
       });
-      navigation.navigate('Login');
+      setRegistered(true);
     } else if (response.status === 400) {
       Dialog.show({
         type: ALERT_TYPE.DANGER,
@@ -170,6 +173,14 @@ const RegisterScreen = (props: any) => {
 
     const response = await verifyOTP(phone, otp);
     if (response.status === 200) {
+      storage.set(
+        'credentialsInfoMMV',
+        JSON.stringify({
+          mobile: phone,
+          password: password,
+        }),
+      );
+
       Dialog.show({
         type: ALERT_TYPE.SUCCESS,
         title: 'Success',
