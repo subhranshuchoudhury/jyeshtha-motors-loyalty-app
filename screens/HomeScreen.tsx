@@ -9,25 +9,21 @@ import {
   FlatList,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-// import SplashScreen from 'react-native-splash-screen';
 import {AuthContext} from '../context/AuthContext';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import QRScanner from '../components/QRScanner';
-import SplashScreen from 'react-native-splash-screen';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 const HomeScreen = (props: any) => {
   const [showQRScanner, setshowQRScanner] = useState<boolean>(false);
   const [scanData, setScanData] = useState<string>('');
   const [isRedeemedLoading, setIsRedeemedLoading] = useState(false);
-  const {AuthInfo, mutateBalance}: any = useContext(AuthContext);
-
+  const {AuthInfo, handleManipulation}: any = useContext(AuthContext);
+  const [redeemedCoupons, setRedeemedCoupons] = useState<any>([]);
   // splash screen
   useEffect(() => {
     changeNavigationBarColorAsync('');
-    setTimeout(() => {
-      SplashScreen.hide();
-    }, 3000);
   }, []);
 
   const changeNavigationBarColorAsync = async (color: string) => {
@@ -51,40 +47,66 @@ const HomeScreen = (props: any) => {
     setshowQRScanner(action);
   };
 
-  const demoArray = [
+  const fetchReq1 = fetch(
+    `https://jyeshtha-rewards.onrender.com/api/buyer/redeem-code/history?limit=10&skip=0`,
     {
-      code: 'TYGHFD HYUIYT BHGUT8 GHGFD4',
-      amount: '2000',
-      date: '12/12/2021',
-      _id: '34535',
+      method: 'GET',
+      headers: {
+        'x-access-token': AuthInfo?.accessToken,
+      },
     },
+  )
+    .then(res => res.json())
+    .catch(error => console.log(error));
+  const fetchReq2 = fetch(
+    `https://jyeshtha-rewards.onrender.com/api/buyer/details`,
     {
-      code: 'TYGHFD HYUIYT BHGUT8 GHGFD4',
-      amount: '100',
-      date: '12/12/2021',
-      _id: '23423',
-    },
-    {
-      code: 'TYGHFD HYUIYT BHGUT8 GHGFD4',
-      amount: '100',
-      date: '12/12/2021',
-      _id: '677856',
-    },
-    {
-      code: 'TYGHFD HYUIYT BHGUT8 GHGFD4',
-      amount: '100',
-      date: '12/12/2021',
-      _id: '67698',
-    },
-    {
-      code: 'TYGHFD HYUIYT BHGUT8 GHGFD4',
-      amount: '100',
-      date: '12/12/2021',
-      _id: '7676',
-    },
-  ];
+      method: 'POST',
+      body: JSON.stringify({
+        details: ['accountBalance name mobile'],
+      }),
+      headers: {
+        'x-access-token': AuthInfo?.accessToken,
+        'Content-Type': 'application/json',
+      },
 
-  const emptyArray: any = [];
+      redirect: 'follow',
+    },
+  )
+    .then(res => res.json())
+    .catch(error => console.log(error));
+
+  const getInitialData = () => {
+    const allData = Promise.all([fetchReq1, fetchReq2]);
+    allData.then(res => {
+      setIsRedeemedLoading(false);
+      if (res?.[0]) {
+        setRedeemedCoupons(res?.[0]?.user || []);
+      }
+      if (res?.[1]) {
+        handleManipulation('name', res?.[1]?.userData?.name);
+        handleManipulation('mobile', res?.[1]?.userData?.mobile);
+        handleManipulation(
+          'accountBalance',
+          res?.[1]?.userData?.accountBalance,
+        );
+      }
+
+      if (!res?.[0] || !res?.[1]) {
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Internet Problem',
+          textBody: 'Something went wrong',
+          button: 'close',
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    setIsRedeemedLoading(true);
+    getInitialData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -211,14 +233,14 @@ const HomeScreen = (props: any) => {
                 justifyContent: 'center',
                 marginTop: 20,
               }}>
-              <View style={{width: '90%', height: 100, borderRadius: 10}} />
+              <View style={{width: '95%', height: 100, borderRadius: 10}} />
             </View>
           </SkeletonPlaceholder>
         )}
         <FlatList
-          data={demoArray}
-          renderItem={({item}) => qrRedeemedTile(item)}
-          keyExtractor={item => item._id}
+          data={redeemedCoupons}
+          renderItem={item => qrRedeemedTile(item)}
+          keyExtractor={item => item.redeemHistory._id}
           ListEmptyComponent={
             <View
               style={{
@@ -282,6 +304,7 @@ const qrRedeemedTile = (data: any) => (
         flexDirection: 'column',
         elevation: 6,
         margin: 5,
+        marginBottom: 15,
       }}>
       <View
         style={{
@@ -293,7 +316,8 @@ const qrRedeemedTile = (data: any) => (
           style={{
             color: 'white',
           }}>
-          Date: {data?.date}
+          Date:{' '}
+          {new Date(data?.item?.redeemHistory?.createdAt)?.toLocaleDateString()}
         </Text>
 
         <Text
@@ -301,7 +325,7 @@ const qrRedeemedTile = (data: any) => (
             color: 'white',
             fontWeight: '700',
           }}>
-          Amount: ₹ {data?.amount}
+          Amount: ₹ {data?.item?.redeemHistory?.amount}
         </Text>
       </View>
 
@@ -318,7 +342,7 @@ const qrRedeemedTile = (data: any) => (
             color: 'white',
             fontWeight: '700',
           }}>
-          {data?.code}
+          {data?.item?.redeemHistory?.code}
         </Text>
         <Text
           style={{
@@ -329,6 +353,21 @@ const qrRedeemedTile = (data: any) => (
           }}>
           JYESHTHA MOTORS
         </Text>
+      </View>
+
+      <View
+        style={{
+          position: 'absolute',
+          bottom: -15,
+          right: 10,
+        }}>
+        <Image
+          style={{
+            width: 50,
+            height: 50,
+          }}
+          source={require('../assets/images/coupon-cut.png')}
+        />
       </View>
     </View>
   </TouchableOpacity>

@@ -10,8 +10,10 @@ import React, {useEffect, useContext, useState} from 'react';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {AuthContext} from '../context/AuthContext';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 const ProfileScreen = (props: any) => {
-  const {AuthInfo, logoutUser}: any = useContext(AuthContext);
+  const {AuthInfo, logoutUser, handleManipulation}: any =
+    useContext(AuthContext);
   const [Loading, setLoading] = useState(true);
   const navigation = props.navigation;
 
@@ -28,6 +30,7 @@ const ProfileScreen = (props: any) => {
   };
 
   const getUserBasicData = async () => {
+    setLoading(true);
     try {
       var myHeaders = new Headers();
       myHeaders.append('x-access-token', AuthInfo?.accessToken);
@@ -49,8 +52,24 @@ const ProfileScreen = (props: any) => {
         requestOptions,
       );
       const result = await response.json();
+
+      if (response.status === 200) {
+        handleManipulation('name', result.userData.name);
+        handleManipulation('mobile', result.userData.mobile);
+        handleManipulation('accountBalance', result.userData.accountBalance);
+      } else {
+        console.log(result);
+      }
+      setLoading(false);
       console.log(result);
     } catch (error) {
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Internet Problem',
+        textBody: 'Something went wrong',
+        button: 'close',
+      });
+      setLoading(false);
       console.log(error);
     }
   };
@@ -62,7 +81,6 @@ const ProfileScreen = (props: any) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
-
       <SkeletonPlaceholder
         enabled={Loading}
         backgroundColor="#618264"
