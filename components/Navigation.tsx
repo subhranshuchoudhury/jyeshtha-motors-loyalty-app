@@ -9,6 +9,8 @@ import FPScreen from '../screens/FPScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoadingScreen from '../screens/LoadingScreen';
 import RedeemSingle from '../screens/RedeemSingle';
+import RedeemScanProcess from '../screens/RedeemScanProcess';
+import {DARK_GREEN, LIGHT_GREEN} from '../constants/constants';
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
   const {AuthInfo}: any = useContext(AuthContext);
@@ -51,6 +53,18 @@ const Navigation = () => {
               }}
               name="RedeemSingle"
               component={RedeemSingle}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: true,
+                title: 'Redeem Coupon',
+                headerTintColor: LIGHT_GREEN,
+                headerStyle: {
+                  backgroundColor: DARK_GREEN,
+                },
+              }}
+              name="RedeemScanProcess"
+              component={RedeemScanProcess}
             />
           </>
         ) : (

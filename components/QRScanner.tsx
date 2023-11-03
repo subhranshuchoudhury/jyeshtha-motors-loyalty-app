@@ -23,7 +23,7 @@ const QRScanner = (props: any) => {
               height: 200,
               resizeMode: 'contain',
             }}
-            source={require('../assets/images/scanner2.gif')}
+            source={require('../assets/images/scanner.png')}
           />
         </View>
       }
@@ -46,6 +46,18 @@ const QRScanner = (props: any) => {
                 resizeMode: 'contain',
               }}
               source={require('../assets/images/close.png')}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => props.scanResult('KEYBOARD_INPUT')}>
+            <Image
+              style={{
+                marginTop: 20,
+                width: 70,
+                height: 70,
+                resizeMode: 'contain',
+              }}
+              source={require('../assets/images/keyboard.png')}
             />
           </TouchableOpacity>
 

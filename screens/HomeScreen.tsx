@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   FlatList,
+  Linking,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../context/AuthContext';
@@ -15,10 +16,9 @@ import QRScanner from '../components/QRScanner';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
-import {BASE_URL, DARK_GREEN} from '../constants/constants';
+import {BASE_URL, DARK_BLUE, DARK_GREEN} from '../constants/constants';
 const HomeScreen = (props: any) => {
   const [showQRScanner, setshowQRScanner] = useState<boolean>(false);
-  const [scanData, setScanData] = useState<string>('');
   const [isRedeemedLoading, setIsRedeemedLoading] = useState(false);
   const {AuthInfo, handleManipulation}: any = useContext(AuthContext);
   const [redeemedCoupons, setRedeemedCoupons] = useState<any>([]);
@@ -39,8 +39,10 @@ const HomeScreen = (props: any) => {
   const scanResult = (data: string) => {
     console.log(data);
     if (data?.length > 5) {
-      setScanData(data);
       setshowQRScanner(false);
+      props.navigation.navigate('RedeemScanProcess', {
+        code: data,
+      });
     }
   };
 
@@ -80,6 +82,7 @@ const HomeScreen = (props: any) => {
       setIsRedeemedLoading(false);
       if (res?.[0]) {
         setRedeemedCoupons(res?.[0]?.user || []);
+        // setRedeemedCoupons([]); // TESTING
       }
       if (res?.[1]) {
         handleManipulation('name', res?.[1]?.userData?.name);
@@ -196,6 +199,7 @@ const HomeScreen = (props: any) => {
           {AuthInfo?.name?.split(' ')?.[0]}!
         </Text>
       </View>
+
       <View
         style={{
           justifyContent: 'space-between',
@@ -203,6 +207,7 @@ const HomeScreen = (props: any) => {
           flex: 1,
           width: '85%',
           marginTop: 30,
+          marginBottom: 10,
         }}>
         <Text style={{color: DARK_GREEN, height: 20, fontWeight: '700'}}>
           Redeem History
@@ -249,9 +254,50 @@ const HomeScreen = (props: any) => {
                 marginTop: 20,
               }}>
               {!isRedeemedLoading && (
-                <Text style={{color: 'black'}}>
-                  You have no redemption history.
-                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    Linking.openURL(
+                      'https://www.youtube.com/watch?v=GRJGKS9blm8',
+                    )
+                  }
+                  style={{
+                    width: '95%',
+                    height: 100,
+                    borderRadius: 10,
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: DARK_BLUE,
+                      width: '100%',
+                      borderRadius: 10,
+                      height: 100,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      padding: 10,
+                      alignItems: 'center',
+                    }}>
+                    <View>
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontWeight: '500',
+                          fontSize: 20,
+                        }}>
+                        How to use the app?
+                      </Text>
+                      <Text>Click here to know more</Text>
+                    </View>
+                    <View>
+                      <Image
+                        style={{
+                          width: 60,
+                          height: 60,
+                        }}
+                        source={require('../assets/images/helpPerson.gif')}
+                      />
+                    </View>
+                  </View>
+                </TouchableOpacity>
               )}
             </View>
           }
