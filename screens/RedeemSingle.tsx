@@ -54,10 +54,14 @@ const RedeemSingle = (props: any) => {
       const result = await response.json();
 
       if (response.status === 200) {
-        console.log(result);
         setRedeemCodeData(result);
       } else {
-        console.log(result);
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: result?.message,
+          textBody: result?.message,
+          button: 'close',
+        });
       }
       setLoading(false);
       console.log(result);
@@ -80,27 +84,23 @@ const RedeemSingle = (props: any) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
-      <SkeletonPlaceholder
-        enabled={Loading}
-        backgroundColor={DARK_GREEN}
-        speed={900}
-        borderRadius={4}>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderWidth: 10,
-            borderRadius: 20,
-            borderColor: DARK_GREEN,
-            padding: 3,
-          }}>
-          <QRCode
-            backgroundColor={LIGHT_GREEN}
-            size={100}
-            value={props.route.params.code}
-          />
-        </View>
-      </SkeletonPlaceholder>
+
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderWidth: 10,
+          borderRadius: 3,
+          borderColor: DARK_GREEN,
+          padding: 4,
+        }}>
+        <QRCode
+          backgroundColor={LIGHT_GREEN}
+          size={100}
+          value={props.route.params.code}
+        />
+      </View>
+
       <Text
         style={{
           color: DARK_GREEN,
@@ -134,7 +134,7 @@ const RedeemSingle = (props: any) => {
           </Text>
           <View style={styles.inputView}>
             <Text style={styles.TextInput}>
-              {RedeemCodeData?.redeemer?.name}
+              {RedeemCodeData?.redeemer?.name?.toUpperCase()}
             </Text>
           </View>
           <Text
