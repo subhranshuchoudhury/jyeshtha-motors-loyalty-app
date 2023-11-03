@@ -11,6 +11,7 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {AuthContext} from '../context/AuthContext';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
+import {BASE_URL, DARK_GREEN} from '../constants/constants';
 const ProfileScreen = (props: any) => {
   const {AuthInfo, logoutUser, handleManipulation}: any =
     useContext(AuthContext);
@@ -48,7 +49,7 @@ const ProfileScreen = (props: any) => {
       };
 
       const response = await fetch(
-        'https://jyeshtha-rewards.onrender.com/api/buyer/details',
+        `${BASE_URL}/api/buyer/details`,
         requestOptions,
       );
       const result = await response.json();
@@ -83,7 +84,7 @@ const ProfileScreen = (props: any) => {
       <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
       <SkeletonPlaceholder
         enabled={Loading}
-        backgroundColor="#618264"
+        backgroundColor={DARK_GREEN}
         speed={900}
         borderRadius={4}>
         <Image
@@ -151,7 +152,7 @@ const ProfileScreen = (props: any) => {
 
       <Text
         style={{
-          color: '#618264',
+          color: DARK_GREEN,
           marginTop: 20,
           fontWeight: '700',
         }}>
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 5,
-    borderColor: '#618264',
+    borderColor: DARK_GREEN,
   },
   inputView: {
     backgroundColor: '#D0E7D2',

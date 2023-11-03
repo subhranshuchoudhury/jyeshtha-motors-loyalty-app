@@ -12,6 +12,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 import {AuthContext} from '../context/AuthContext';
+import {DARK_GREEN} from '../constants/constants';
 const LoginScreen = (props: any) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -115,7 +116,7 @@ const LoginScreen = (props: any) => {
         source={require('../assets/images/jmLogo.png')}
       />
       <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
-      <Spinner color="#618264" visible={Loading} />
+      <Spinner color={DARK_GREEN} visible={Loading} />
 
       <Text
         style={{
@@ -185,7 +186,7 @@ const LoginScreen = (props: any) => {
       </TouchableOpacity>
       <Text
         style={{
-          color: '#618264',
+          color: DARK_GREEN,
           marginTop: 20,
           fontWeight: '700',
         }}>
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#618264',
+    backgroundColor: DARK_GREEN,
   },
 });
 

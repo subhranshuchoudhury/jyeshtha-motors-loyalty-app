@@ -10,6 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import {DARK_GREEN} from '../constants/constants';
 const FPScreen = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,7 +40,7 @@ const FPScreen = (props: any) => {
         source={require('../assets/images/jmLogo.png')}
       />
       <StatusBar barStyle="dark-content" animated backgroundColor="#F3FDE8" />
-      <Spinner color="#618264" visible={false} />
+      <Spinner color={DARK_GREEN} visible={false} />
       <Text
         style={{
           color: 'black',
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#618264',
+    backgroundColor: DARK_GREEN,
   },
 });
 

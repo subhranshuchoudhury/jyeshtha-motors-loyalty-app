@@ -7,6 +7,7 @@ import RegisterScreen from '../screens/RegisterScreen';
 import {AuthContext} from '../context/AuthContext';
 import FPScreen from '../screens/FPScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import LoadingScreen from '../screens/LoadingScreen';
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
   const {AuthInfo}: any = useContext(AuthContext);
@@ -69,6 +70,13 @@ const Navigation = () => {
             />
           </>
         )}
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="LoadingScreen"
+          component={LoadingScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

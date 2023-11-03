@@ -15,6 +15,7 @@ import QRScanner from '../components/QRScanner';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
+import {BASE_URL, DARK_GREEN} from '../constants/constants';
 const HomeScreen = (props: any) => {
   const [showQRScanner, setshowQRScanner] = useState<boolean>(false);
   const [scanData, setScanData] = useState<string>('');
@@ -48,7 +49,7 @@ const HomeScreen = (props: any) => {
   };
 
   const fetchReq1 = fetch(
-    `https://jyeshtha-rewards.onrender.com/api/buyer/redeem-code/history?limit=10&skip=0`,
+    `${BASE_URL}/api/buyer/redeem-code/history?limit=10&skip=0`,
     {
       method: 'GET',
       headers: {
@@ -58,21 +59,18 @@ const HomeScreen = (props: any) => {
   )
     .then(res => res.json())
     .catch(error => console.log(error));
-  const fetchReq2 = fetch(
-    `https://jyeshtha-rewards.onrender.com/api/buyer/details`,
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        details: ['accountBalance name mobile'],
-      }),
-      headers: {
-        'x-access-token': AuthInfo?.accessToken,
-        'Content-Type': 'application/json',
-      },
-
-      redirect: 'follow',
+  const fetchReq2 = fetch(`${BASE_URL}/api/buyer/details`, {
+    method: 'POST',
+    body: JSON.stringify({
+      details: ['accountBalance name mobile'],
+    }),
+    headers: {
+      'x-access-token': AuthInfo?.accessToken,
+      'Content-Type': 'application/json',
     },
-  )
+
+    redirect: 'follow',
+  })
     .then(res => res.json())
     .catch(error => console.log(error));
 
@@ -115,7 +113,7 @@ const HomeScreen = (props: any) => {
         <View
           style={{
             flex: 1,
-            backgroundColor: '#618264',
+            backgroundColor: DARK_GREEN,
             marginTop: 20,
             width: '100%',
             borderTopEndRadius: 20,
@@ -176,8 +174,9 @@ const HomeScreen = (props: any) => {
 
             <Text
               style={{
-                color: 'black',
+                color: DARK_GREEN,
                 fontWeight: '800',
+                fontSize: 15,
               }}>
               {AuthInfo?.accountBalance || 0}
             </Text>
@@ -205,11 +204,11 @@ const HomeScreen = (props: any) => {
           width: '85%',
           marginTop: 30,
         }}>
-        <Text style={{color: '#618264', height: 20, fontWeight: '700'}}>
+        <Text style={{color: DARK_GREEN, height: 20, fontWeight: '700'}}>
           Redeem History
         </Text>
         <TouchableOpacity>
-          <Text style={{color: '#618264', height: 20, fontWeight: '700'}}>
+          <Text style={{color: DARK_GREEN, height: 20, fontWeight: '700'}}>
             View All
           </Text>
         </TouchableOpacity>
@@ -223,9 +222,9 @@ const HomeScreen = (props: any) => {
           marginTop: 10,
           height: 500,
         }}>
-        <Spinner color="#618264" animation="fade" visible={false} />
+        <Spinner color={DARK_GREEN} animation="fade" visible={false} />
         {isRedeemedLoading && (
-          <SkeletonPlaceholder backgroundColor="#618264" borderRadius={4}>
+          <SkeletonPlaceholder backgroundColor={DARK_GREEN} borderRadius={4}>
             <View
               style={{
                 flexDirection: 'row',
@@ -249,9 +248,11 @@ const HomeScreen = (props: any) => {
                 justifyContent: 'center',
                 marginTop: 20,
               }}>
-              <Text style={{color: 'black'}}>
-                You have no redemption history.
-              </Text>
+              {!isRedeemedLoading && (
+                <Text style={{color: 'black'}}>
+                  You have no redemption history.
+                </Text>
+              )}
             </View>
           }
         />
@@ -284,7 +285,7 @@ const HomeScreen = (props: any) => {
           </View>
         </TouchableOpacity>
       </View>
-      <Text style={{color: '#618264', fontWeight: '700'}}>
+      <Text style={{color: DARK_GREEN, fontWeight: '700'}}>
         © Jyeshtha Motors
       </Text>
     </View>
@@ -295,7 +296,7 @@ const qrRedeemedTile = (data: any) => (
   <TouchableOpacity>
     <View
       style={{
-        backgroundColor: '#618264',
+        backgroundColor: DARK_GREEN,
         minWidth: '90%',
         borderRadius: 10,
         minHeight: 120,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   },
 
   headingText: {
-    color: '#618264',
+    color: DARK_GREEN,
     fontSize: 30,
     fontWeight: 'bold',
   },

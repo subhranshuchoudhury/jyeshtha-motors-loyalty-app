@@ -1,6 +1,7 @@
 import React, {createContext, useEffect, useState} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {MMKV} from 'react-native-mmkv';
+import {BASE_URL} from '../constants/constants';
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({children}: any) => {
@@ -59,7 +60,7 @@ export const AuthProvider = ({children}: any) => {
       };
 
       const response = await fetch(
-        'https://jyeshtha-rewards.onrender.com/api/user/auth/register',
+        `${BASE_URL}/api/user/auth/register`,
         requestOptions,
       );
 
@@ -124,7 +125,7 @@ export const AuthProvider = ({children}: any) => {
       };
 
       const response = await fetch(
-        'https://jyeshtha-rewards.onrender.com/api/user/auth/send-otp',
+        `${BASE_URL}/api/user/auth/send-otp`,
         requestOptions,
       );
 
@@ -184,7 +185,7 @@ export const AuthProvider = ({children}: any) => {
       };
 
       const response = await fetch(
-        'https://jyeshtha-rewards.onrender.com/api/user/auth/verify-otp',
+        `${BASE_URL}/api/user/auth/verify-otp`,
         requestOptions,
       );
 
@@ -249,7 +250,7 @@ export const AuthProvider = ({children}: any) => {
         redirect: 'follow',
       };
       const response = await fetch(
-        'https://jyeshtha-rewards.onrender.com/api/user/auth/login',
+        `${BASE_URL}/api/user/auth/login`,
         requestOptions,
       );
 
@@ -308,7 +309,6 @@ export const AuthProvider = ({children}: any) => {
   };
 
   const autoLogin = async () => {
-    console.log('Auto Login');
     try {
       const authDataMMVK: string | undefined =
         storage.getString('authInfoMMKV');
@@ -321,7 +321,7 @@ export const AuthProvider = ({children}: any) => {
         const currentTime: Date = new Date();
         const diff = currentTime.getTime() - tokenTime.getTime();
         const hours = Math.floor(diff / 1000 / 60 / 60);
-        if (hours > 10) {
+        if (hours > 20) {
           await loginUser(credentialsInfo?.mobile, credentialsInfo?.password);
           SplashScreen.hide();
         } else {
@@ -338,7 +338,6 @@ export const AuthProvider = ({children}: any) => {
         SplashScreen.hide();
       }
     } catch (error) {
-      console.log('error', error);
       setAuthInfo({
         accessToken: null,
         accountBalance: 0,
@@ -346,7 +345,6 @@ export const AuthProvider = ({children}: any) => {
         name: '',
         tokenTime: null,
       });
-
       SplashScreen.hide();
     }
   };
