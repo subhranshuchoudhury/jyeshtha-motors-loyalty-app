@@ -238,7 +238,7 @@ const HomeScreen = (props: any) => {
         )}
         <FlatList
           data={redeemedCoupons}
-          renderItem={item => qrRedeemedTile(item)}
+          renderItem={item => qrRedeemedTile(item, props)}
           keyExtractor={item => item.redeemHistory._id}
           ListEmptyComponent={
             <View
@@ -292,8 +292,13 @@ const HomeScreen = (props: any) => {
   );
 };
 
-const qrRedeemedTile = (data: any) => (
-  <TouchableOpacity>
+const qrRedeemedTile = (data: any, props: any) => (
+  <TouchableOpacity
+    onPress={() =>
+      props.navigation.navigate('RedeemSingle', {
+        code: data?.item?.redeemHistory?.code,
+      })
+    }>
     <View
       style={{
         backgroundColor: DARK_GREEN,

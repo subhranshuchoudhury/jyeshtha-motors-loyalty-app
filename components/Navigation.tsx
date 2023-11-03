@@ -8,6 +8,7 @@ import {AuthContext} from '../context/AuthContext';
 import FPScreen from '../screens/FPScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoadingScreen from '../screens/LoadingScreen';
+import RedeemSingle from '../screens/RedeemSingle';
 const Stack = createNativeStackNavigator();
 const Navigation = () => {
   const {AuthInfo}: any = useContext(AuthContext);
@@ -43,6 +44,13 @@ const Navigation = () => {
               }}
               name="FPScreen"
               component={FPScreen}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="RedeemSingle"
+              component={RedeemSingle}
             />
           </>
         ) : (
