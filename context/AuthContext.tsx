@@ -196,6 +196,17 @@ export const AuthProvider = ({children}: any) => {
           tokenTime: new Date(),
         });
 
+        storage.set(
+          'authInfoMMKV',
+          JSON.stringify({
+            accessToken: result?.accessToken,
+            name: result?.name,
+            mobile: result?.mobile,
+            accountBalance: result?.accountBalance,
+            tokenTime: new Date(),
+          }),
+        );
+
         return {
           status: 200,
           message: result?.message,
@@ -252,6 +263,7 @@ export const AuthProvider = ({children}: any) => {
 
       const result = await response.json();
       if (response.status === 200) {
+        console.log('LOGIN SUCCESS --- ', result?.accessToken);
         storage.set(
           'authInfoMMKV',
           JSON.stringify({
@@ -277,6 +289,8 @@ export const AuthProvider = ({children}: any) => {
           message: 'Login Success',
         };
       } else {
+        console.log('LOGIN FAILED --- ', result?.accessToken);
+
         return {
           status: response.status,
           message: result?.message,
@@ -317,6 +331,7 @@ export const AuthProvider = ({children}: any) => {
         const diff = currentTime.getTime() - tokenTime.getTime();
         const hours = Math.floor(diff / 1000 / 60 / 60);
         if (hours > 20) {
+          // testing <
           await loginUser(credentialsInfo?.mobile, credentialsInfo?.password);
           SplashScreen.hide();
         } else {

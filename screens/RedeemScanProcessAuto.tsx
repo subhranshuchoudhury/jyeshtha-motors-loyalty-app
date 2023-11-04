@@ -21,7 +21,7 @@ import {
   RED_BUTTON,
 } from '../constants/constants';
 const RedeemScanProcessAuto = (props: any) => {
-  const {AuthInfo}: any = useContext(AuthContext);
+  const {AuthInfo, handleManipulation}: any = useContext(AuthContext);
   const [Loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [RedeemSuccessDetails, setRedeemSuccessDetails] = useState<any>({});
@@ -181,6 +181,10 @@ const RedeemScanProcessAuto = (props: any) => {
           textBody: data?.message,
           button: 'close',
         });
+        handleManipulation(
+          'accountBalance',
+          AuthInfo.accountBalance + data?.redeemData?.amount,
+        );
         setIsSuccess(true);
         setRedeemSuccessDetails(data?.redeemData);
       } else {
