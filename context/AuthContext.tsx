@@ -42,7 +42,6 @@ export const AuthProvider = ({children}: any) => {
     message: string;
   }> => {
     try {
-      console.log('name', name, 'mobile', mobile, 'password', password);
       const myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
 
@@ -65,7 +64,6 @@ export const AuthProvider = ({children}: any) => {
       );
 
       const result = await response.json();
-      console.log('result', result, 'response', response.status);
       if (response.status === 200) {
         await sendOTP(mobile);
 
@@ -130,7 +128,6 @@ export const AuthProvider = ({children}: any) => {
       );
 
       const result = await response.json();
-      console.log('result', result, 'response', response.status);
       if (response.status === 200) {
         return {
           status: 200,
@@ -190,7 +187,6 @@ export const AuthProvider = ({children}: any) => {
       );
 
       const result = await response.json();
-      console.log('result', result, 'response', response.status);
       if (response.status === 200) {
         setAuthInfo({
           accessToken: result?.accessToken,
@@ -255,7 +251,6 @@ export const AuthProvider = ({children}: any) => {
       );
 
       const result = await response.json();
-      console.log('result', result, 'response', response.status);
       if (response.status === 200) {
         storage.set(
           'authInfoMMKV',

@@ -17,8 +17,6 @@ const FPScreen = (props: any) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [otpSent, setOtpSent] = useState(false);
 
-  // console.log(props);
-
   const navigation = props.navigation;
 
   useEffect(() => {

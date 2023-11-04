@@ -64,7 +64,6 @@ const RedeemSingle = (props: any) => {
         });
       }
       setLoading(false);
-      console.log(result);
     } catch (error) {
       Dialog.show({
         type: ALERT_TYPE.DANGER,

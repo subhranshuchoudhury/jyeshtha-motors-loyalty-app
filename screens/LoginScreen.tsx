@@ -16,7 +16,7 @@ import {DARK_GREEN} from '../constants/constants';
 const LoginScreen = (props: any) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const {AuthInfo, loginUser}: any = useContext(AuthContext);
+  const {loginUser}: any = useContext(AuthContext);
   const [Loading, setLoading] = useState(false);
   // console.log(props);
 

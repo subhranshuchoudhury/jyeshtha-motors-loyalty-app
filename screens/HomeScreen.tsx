@@ -40,7 +40,7 @@ const HomeScreen = (props: any) => {
     console.log(data);
     if (data?.length > 5) {
       setshowQRScanner(false);
-      props.navigation.navigate('RedeemScanProcess', {
+      props.navigation.navigate('RedeemScanProcessAuto', {
         code: data,
       });
     }
@@ -107,7 +107,7 @@ const HomeScreen = (props: any) => {
   useEffect(() => {
     setIsRedeemedLoading(true);
     getInitialData();
-  }, []);
+  }, [props.route.params?.refresh]);
 
   return (
     <View style={styles.container}>

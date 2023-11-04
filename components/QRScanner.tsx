@@ -1,9 +1,22 @@
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 const QRScanner = (props: any) => {
-  const [torchLightToggle, setTorchLightToggle] = useState(true);
+  const [torchLightToggle, setTorchLightToggle] = useState(false);
+  const changeNavigationBarColorAsync = async () => {
+    try {
+      const response = await changeNavigationBarColor('#F3FDE8');
+    } catch (e) {
+      console.log('changeNavigationBarColorAsync', e); // {success: false}
+    }
+  };
+
+  useEffect(() => {
+    changeNavigationBarColorAsync();
+  }, []);
+
   return (
     <QRCodeScanner
       flashMode={
