@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Navigation from './components/Navigation';
 import {AuthProvider} from './context/AuthContext';
 import NetInfo from '@react-native-community/netinfo';
 import {
   ALERT_TYPE,
-  Dialog,
   AlertNotificationRoot,
   Toast,
 } from 'react-native-alert-notification';
