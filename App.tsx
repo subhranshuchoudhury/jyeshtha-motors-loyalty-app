@@ -7,6 +7,7 @@ import {
   AlertNotificationRoot,
   Toast,
 } from 'react-native-alert-notification';
+import {ThemeProvider} from './context/ThemeContext';
 
 const App = () => {
   useEffect(() => {
@@ -30,9 +31,11 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <AlertNotificationRoot theme="light">
-        <Navigation />
-      </AlertNotificationRoot>
+      <ThemeProvider>
+        <AlertNotificationRoot theme="light">
+          <Navigation />
+        </AlertNotificationRoot>
+      </ThemeProvider>
     </AuthProvider>
   );
 };
