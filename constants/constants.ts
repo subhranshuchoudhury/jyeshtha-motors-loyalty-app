@@ -4,6 +4,7 @@ const lightTheme: Theme = {
   secondary: '#CF6679',
   background: '#FFFFFF',
   error: '#B00020',
+  font3: 10,
 };
 const darkTheme: Theme = {
   isLight: false,
@@ -11,6 +12,7 @@ const darkTheme: Theme = {
   secondary: '#03DAC6',
   background: '#121212',
   error: '#CF6679',
+  font3: 10,
 };
 
 type Theme = {
@@ -19,6 +21,7 @@ type Theme = {
   secondary: string;
   background: string;
   error: string;
+  font3: number;
 };
 
 export {lightTheme, darkTheme};
