@@ -6,8 +6,9 @@ import AdCarousel from '../components/Home/AdCarousel';
 import TransactionsList from '../components/Home/TransactionsList';
 import QuickMenu from '../components/Home/QuickMenu';
 import {View} from 'react-native-ui-lib';
-const HomeScreen = (props: any) => {
+const HomeScreen = ({props}: any) => {
   const {Theme, setTheme}: any = useContext(ThemeContext);
+
   // splash screen
   useEffect(() => {
     console.log('HomeScreen.tsx', Theme);
@@ -37,7 +38,7 @@ const HomeScreen = (props: any) => {
         backgroundColor={Theme.theme.background}
         barStyle={!Theme.theme.isLight ? 'light-content' : 'dark-content'}
       />
-      <AdCarousel />
+      <AdCarousel props={props} />
       <QuickMenu />
       <TransactionsList />
     </View>

@@ -1,24 +1,15 @@
 import React from 'react';
-import {
-  Alert,
-  Animated,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Alert, Animated, StyleSheet, TouchableOpacity} from 'react-native';
 import {CurvedBottomBar} from 'react-native-curved-bottom-bar';
 import {NavigationContainer} from '@react-navigation/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faMugSaucer,
-  faHouse,
-  faBarcode,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import {faHouse, faBarcode, faUser} from '@fortawesome/free-solid-svg-icons';
 import HomeScreen from '../screens/Home';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import User from '../screens/User';
-
+import Web from '../screens/Web';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
 export default function App() {
   const _renderIcon = (routeName: any, selectedTab: any) => {
     let icon: IconProp = faHouse;
@@ -75,12 +66,16 @@ export default function App() {
         <CurvedBottomBar.Screen
           name="Home"
           position="LEFT"
-          component={() => <HomeScreen />}
+          component={(props: any) => <HomeScreen props={props} />}
         />
         <CurvedBottomBar.Screen
           name="User"
           component={() => <User />}
           position="RIGHT"
+        />
+        <Stack.Screen
+          name="Web"
+          component={(props: any) => <Web props={props} />}
         />
       </CurvedBottomBar.Navigator>
     </NavigationContainer>
