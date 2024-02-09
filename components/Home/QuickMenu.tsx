@@ -7,7 +7,6 @@ import pb from '../../utils/pocketbase';
 
 const QuickMenu = ({props}: any) => {
   const {Theme}: any = useContext(ThemeContext);
-
   const [Data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -77,6 +76,7 @@ const QuickMenu = ({props}: any) => {
               justifyContent: 'flex-start',
               margin: 25,
               marginTop: 25,
+              columnGap: 23,
               height: 100,
               backgroundColor: Theme.theme.background,
             }}>
@@ -86,9 +86,14 @@ const QuickMenu = ({props}: any) => {
                   key={item.id}
                   style={{flexDirection: 'column', alignItems: 'center'}}>
                   <Avatar
-                    onPress={() =>
-                      props.navigation.navigate('Web', {uri: item.url})
-                    }
+                    onPress={() => {
+                      if (!item.screen)
+                        props.navigation.navigate('Web', {uri: item.url});
+                      else
+                        props.navigation.navigate(item.screen, {
+                          data: item.data,
+                        });
+                    }}
                     containerStyle={{
                       margin: 5,
                       backgroundColor: Theme.theme.secondary,
