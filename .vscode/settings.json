@@ -6,6 +6,8 @@
         "netinfo",
         "qrcode",
         "quickmenu",
-        "setshow"
+        "setshow",
+        "shawdow",
+        "tabbar"
     ]
 }
