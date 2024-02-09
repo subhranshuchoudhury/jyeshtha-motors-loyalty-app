@@ -27,6 +27,7 @@ export default function AdCarousel({props}: any) {
   return (
     <>
       <SkeletonView
+        style={{margin: 13}}
         template={SkeletonView.templates.LIST_ITEM}
         showContent={!isLoading}
         renderContent={() => (

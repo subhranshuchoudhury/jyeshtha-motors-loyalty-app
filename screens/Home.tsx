@@ -7,7 +7,7 @@ import TransactionsList from '../components/Home/TransactionsList';
 import QuickMenu from '../components/Home/QuickMenu';
 import {View} from 'react-native-ui-lib';
 const HomeScreen = ({props}: any) => {
-  const {Theme, setTheme}: any = useContext(ThemeContext);
+  const {Theme}: any = useContext(ThemeContext);
 
   // splash screen
   useEffect(() => {
@@ -39,7 +39,7 @@ const HomeScreen = ({props}: any) => {
         barStyle={!Theme.theme.isLight ? 'light-content' : 'dark-content'}
       />
       <AdCarousel props={props} />
-      <QuickMenu />
+      <QuickMenu props={props} />
       <TransactionsList />
     </View>
   );
