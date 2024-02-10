@@ -1,16 +1,34 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Alert, Animated, StyleSheet, TouchableOpacity} from 'react-native';
 import {CurvedBottomBar} from 'react-native-curved-bottom-bar';
 import {NavigationContainer} from '@react-navigation/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faHouse, faBarcode, faUser} from '@fortawesome/free-solid-svg-icons';
+import {
+  faHouse,
+  faBarcode,
+  faUser,
+  faKey,
+  faUserPlus,
+  faUnlock,
+  faLifeRing,
+} from '@fortawesome/free-solid-svg-icons';
 import HomeScreen from '../screens/Home';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import User from '../screens/User';
 import Web from '../screens/Web';
+import {ThemeContext} from '../context/ThemeContext';
+import {AuthContext} from '../context/AuthContext';
+
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Login from '../screens/auth/Login';
+import Register from '../screens/auth/Register';
+import Forgot from '../screens/auth/Forgot';
+import Help from '../screens/Help';
 const Stack = createNativeStackNavigator();
 export default function App() {
+  const {Theme, setTheme}: any = useContext(ThemeContext);
+  const {AuthInfo, handleAuthInfo}: any = useContext(AuthContext);
+  console.log('AuthInfo', AuthInfo);
   const _renderIcon = (routeName: any, selectedTab: any) => {
     let icon: IconProp = faHouse;
 
@@ -21,12 +39,21 @@ export default function App() {
       case 'User':
         icon = faUser;
         break;
+      case 'Login':
+        icon = faKey;
+        break;
+      case 'Register':
+        icon = faUserPlus;
+        break;
+      case 'Forgot':
+        icon = faUnlock;
+        break;
     }
 
     return (
       <FontAwesomeIcon
         icon={icon}
-        color={routeName === selectedTab ? 'black' : 'gray'}
+        color={routeName === selectedTab ? Theme.theme.primary : 'gray'}
       />
     );
   };
@@ -43,41 +70,88 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <CurvedBottomBar.Navigator
-        screenOptions={{headerShown: false}}
-        type="UP"
-        style={styles.bottomBar}
-        shadowStyle={styles.shawdow}
-        height={55}
-        circleWidth={50}
-        bgColor="white"
-        initialRouteName="Home"
-        borderTopLeftRight
-        renderCircle={({selectedTab, navigate}) => (
-          <Animated.View style={styles.btnCircleUp}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => Alert.alert('Click Action')}>
-              <FontAwesomeIcon icon={faBarcode} size={25} />
-            </TouchableOpacity>
-          </Animated.View>
-        )}
-        tabBar={renderTabBar}>
-        <CurvedBottomBar.Screen
-          name="Home"
-          position="LEFT"
-          component={(props: any) => <HomeScreen props={props} />}
-        />
-        <CurvedBottomBar.Screen
-          name="User"
-          component={() => <User />}
-          position="RIGHT"
-        />
-        <Stack.Screen
-          name="Web"
-          component={(props: any) => <Web props={props} />}
-        />
-      </CurvedBottomBar.Navigator>
+      {AuthInfo.accessToken ? (
+        <CurvedBottomBar.Navigator
+          screenOptions={{headerShown: false}}
+          type="DOWN"
+          style={styles.bottomBar}
+          shadowStyle={styles.shawdow}
+          height={55}
+          circleWidth={50}
+          bgColor={Theme.theme.background}
+          initialRouteName="Home"
+          circlePosition="CENTER"
+          borderTopLeftRight
+          renderCircle={({selectedTab, navigate}) => (
+            <Animated.View style={styles.btnCircleUp}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => Alert.alert('Click Action')}>
+                <FontAwesomeIcon icon={faBarcode} size={25} />
+              </TouchableOpacity>
+            </Animated.View>
+          )}
+          tabBar={renderTabBar}>
+          <CurvedBottomBar.Screen
+            name="Home"
+            position="LEFT"
+            component={(props: any) => <HomeScreen props={props} />}
+          />
+          <CurvedBottomBar.Screen
+            name="User"
+            component={() => <User />}
+            position="RIGHT"
+          />
+          <Stack.Screen
+            name="Web"
+            component={(props: any) => <Web props={props} />}
+          />
+        </CurvedBottomBar.Navigator>
+      ) : (
+        <CurvedBottomBar.Navigator
+          screenOptions={{headerShown: false}}
+          type="DOWN"
+          style={styles.bottomBar}
+          shadowStyle={styles.shawdow}
+          height={55}
+          circleWidth={50}
+          bgColor={Theme.theme.background}
+          initialRouteName="Login"
+          circlePosition="RIGHT"
+          borderTopLeftRight
+          renderCircle={({selectedTab, navigate}) => (
+            <Animated.View style={styles.btnCircleUp}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  handleAuthInfo('accessToken', 'THIS_IS_A_TEST_LOGIN_TOKEN')
+                }>
+                <FontAwesomeIcon icon={faLifeRing} size={25} />
+              </TouchableOpacity>
+            </Animated.View>
+          )}
+          tabBar={renderTabBar}>
+          <CurvedBottomBar.Screen
+            name="Login"
+            position="LEFT"
+            component={(props: any) => <Login props={props} />}
+          />
+          <CurvedBottomBar.Screen
+            name="Forgot"
+            position="LEFT"
+            component={(props: any) => <Forgot props={props} />}
+          />
+          <CurvedBottomBar.Screen
+            name="Register"
+            position="LEFT"
+            component={(props: any) => <Register props={props} />}
+          />
+          <Stack.Screen
+            name="Help"
+            component={(props: any) => <Help props={props} />}
+          />
+        </CurvedBottomBar.Navigator>
+      )}
     </NavigationContainer>
   );
 }

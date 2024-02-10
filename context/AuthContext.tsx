@@ -18,6 +18,10 @@ export const AuthProvider = ({children}: any) => {
     tokenTime: null,
   });
 
+  const handleAuthInfo = async (key: string, value: any) => {
+    setAuthInfo({...AuthInfo, [key]: value});
+  };
+
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -26,6 +30,7 @@ export const AuthProvider = ({children}: any) => {
     <AuthContext.Provider
       value={{
         AuthInfo,
+        handleAuthInfo,
       }}>
       {children}
     </AuthContext.Provider>
