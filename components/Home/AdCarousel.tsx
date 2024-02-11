@@ -59,9 +59,6 @@ export default function AdCarousel({props}: any) {
                         }}
                         style={{width: '100%', height: '100%', borderRadius: 8}}
                       />
-                      <Text style={{color: 'black', fontSize: 23}}>
-                        {'Hello'}
-                      </Text>
                     </View>
                   </View>
                 </TouchableOpacity>

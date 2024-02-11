@@ -69,8 +69,9 @@ export default function App() {
   };
 
   return (
+    // for Testing purpose
     <NavigationContainer>
-      {AuthInfo.accessToken ? (
+      {AuthInfo.accessToken || true ? (
         <CurvedBottomBar.Navigator
           screenOptions={{headerShown: false}}
           type="DOWN"

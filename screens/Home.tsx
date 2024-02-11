@@ -40,7 +40,7 @@ const HomeScreen = ({props}: any) => {
       />
       <AdCarousel props={props} />
       <QuickMenu props={props} />
-      <TransactionsList />
+      <TransactionsList props={props} />
     </View>
   );
 };
