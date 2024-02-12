@@ -8,6 +8,7 @@ const lightTheme: Theme = {
   text: 'black',
   font3: 10,
   font2: 13,
+  font1: 20,
   fontFamilies: {
     primary: 'Roboto-Regular',
     secondary: 'Roboto-Light',
@@ -27,6 +28,7 @@ const darkTheme: Theme = {
   text: '#FFFFFF',
   font3: 10,
   font2: 13,
+  font1: 20,
   fontFamilies: {
     primary: 'Roboto-Regular',
     secondary: 'Roboto-Light',
@@ -47,6 +49,7 @@ type Theme = {
   text: string;
   font3: number;
   font2: number;
+  font1: number;
   fontFamilies: {
     primary: string;
     secondary: string;

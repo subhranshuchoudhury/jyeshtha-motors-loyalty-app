@@ -8,7 +8,8 @@ import {
   Toast,
 } from 'react-native-alert-notification';
 import {ThemeProvider} from './context/ThemeContext';
-
+import {QueryClient, QueryClientProvider} from 'react-query';
+const queryClient = new QueryClient();
 const App = () => {
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -19,7 +20,10 @@ const App = () => {
         Toast.show({
           type: ALERT_TYPE.DANGER,
           title: 'No Internet Connection',
-          autoClose: 60000,
+          autoClose: 120000,
+          titleStyle: {
+            margin: 10,
+          },
         });
       } else {
         Toast.hide();
@@ -30,13 +34,15 @@ const App = () => {
   }, []);
 
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <AlertNotificationRoot theme="light">
-          <Navigation />
-        </AlertNotificationRoot>
-      </ThemeProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider>
+          <AlertNotificationRoot theme="light">
+            <Navigation />
+          </AlertNotificationRoot>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

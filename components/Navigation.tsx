@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Alert, Animated, StyleSheet, TouchableOpacity} from 'react-native';
 import {CurvedBottomBar} from 'react-native-curved-bottom-bar';
 import {NavigationContainer} from '@react-navigation/native';
@@ -24,11 +24,30 @@ import Login from '../screens/auth/Login';
 import Register from '../screens/auth/Register';
 import Forgot from '../screens/auth/Forgot';
 import Help from '../screens/Help';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 const Stack = createNativeStackNavigator();
 export default function App() {
   const {Theme, setTheme}: any = useContext(ThemeContext);
-  const {AuthInfo, handleAuthInfo}: any = useContext(AuthContext);
+  const {AuthInfo, handleAuthInfo, replaceAuthInfo}: any =
+    useContext(AuthContext);
   console.log('AuthInfo', AuthInfo);
+  useEffect(() => {
+    console.log('HomeScreen.tsx', Theme);
+    changeNavigationBarColorAsync();
+  }, []);
+
+  const changeNavigationBarColorAsync = async () => {
+    try {
+      const response = await changeNavigationBarColor(
+        Theme.theme.background,
+        true,
+        true,
+      );
+      // console.log(response); // {success: true}
+    } catch (e) {
+      console.log(e); // {success: false}
+    }
+  };
   const _renderIcon = (routeName: any, selectedTab: any) => {
     let icon: IconProp = faHouse;
 
@@ -68,10 +87,21 @@ export default function App() {
     );
   };
 
+  const handleAuthResponse = (authInfo: authType) => {
+    replaceAuthInfo(authInfo);
+  };
+
+  type authType = {
+    accessToken: string | null;
+    name: string;
+    mobile: string;
+    tokenTime: Date | null;
+  };
+
   return (
     // for Testing purpose
     <NavigationContainer>
-      {AuthInfo.accessToken || true ? (
+      {AuthInfo.accessToken ? (
         <CurvedBottomBar.Navigator
           screenOptions={{headerShown: false}}
           type="DOWN"
@@ -135,21 +165,29 @@ export default function App() {
           <CurvedBottomBar.Screen
             name="Login"
             position="LEFT"
-            component={(props: any) => <Login props={props} />}
+            component={(props: any) => (
+              <Login handleAuthResponse={handleAuthResponse} props={props} />
+            )}
           />
           <CurvedBottomBar.Screen
             name="Forgot"
             position="LEFT"
-            component={(props: any) => <Forgot props={props} />}
+            component={(props: any) => (
+              <Forgot handleAuthResponse={handleAuthResponse} props={props} />
+            )}
           />
           <CurvedBottomBar.Screen
             name="Register"
             position="LEFT"
-            component={(props: any) => <Register props={props} />}
+            component={(props: any) => (
+              <Register handleAuthResponse={handleAuthResponse} props={props} />
+            )}
           />
           <Stack.Screen
             name="Help"
-            component={(props: any) => <Help props={props} />}
+            component={(props: any) => (
+              <Help handleAuthResponse={handleAuthResponse} props={props} />
+            )}
           />
         </CurvedBottomBar.Navigator>
       )}

@@ -59,6 +59,7 @@ export default function TransactionsList(props: any) {
               flexDirection: 'column',
               justifyContent: 'space-between',
               padding: 10,
+              elevation: 5,
             }}>
             <View
               style={{
